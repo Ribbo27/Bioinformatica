@@ -5,8 +5,10 @@ import sys
 import re
 import random
 
+print(len(sys.argv))
 with open(sys.argv[1],'r') as input_file:
     file = input_file.read()
+
 
 match=re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M)
 flag=True
