@@ -4,20 +4,16 @@
 import sys 
 import re
 import random
-from functools import reduce
 
-def builder(edgelist, nodeList, charList):
+def builder(nodeList, charList):
     
-    nodeList = (map(lambda x: int(x[0]), edgelist))         # List of all nodes construction
-    nodeList.extend(map(lambda x: int(x[1]), edgeList))
-    charList = map(lambda x: int(x[2]), edgeList)           # List of all characters
-    charList[:] = [char for char in charList if char > 0]   # List of all positive characters
+    #charList[:] = [char for char in charList if char >= 0]   # List of all positive characters
 
     nodes = max(nodeList)                                   # Number of nodes
     characters = len(charList)                              # Number of character
 
     # Matrix building
-    Matrix = [[0 for x in range(characters)] for y in range(nodes)]
+    Matrix = [[2 for x in range(characters)] for y in range(nodes)]
     return Matrix
 
 def findRoot(edgeList):
@@ -32,6 +28,23 @@ def findRoot(edgeList):
                 return tmp 
     print("Error: root not found!")       # You should never get here
     sys.exit()
+
+def matrixGen(edgeList, nodeList, matrix):
+
+    route = []
+    node = 8
+    #for j in range(len(nodeList)):
+    #    node = nodeList[j]
+    print edgeList
+    for i in range(len(edgeList)):
+        
+        if edgeList[i][1] == node:
+            route.append(edgeList[i])
+            node = int(edgeList[i][0])
+            print node
+    
+    print route
+
 
 def shuffle(edgeList):
     ''' 
@@ -83,13 +96,21 @@ with open(sys.argv[1],'r') as input_file:   # Opening input file
 
 edgeList = re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M)
 
-edgeList[:] = [x for x in edgeList if int(x[2]) >= 0]    
+#edgeList[:] = [x for x in edgeList if int(x[2]) >= 0]    
 
-filoMatrix = builder(edgeList, nodeList, charList)
+nodeList = (map(lambda x: int(x[0]), edgeList))         # List of all nodes construction
+nodeList.extend(map(lambda x: int(x[1]), edgeList))
 
-#listaTest = [(1, 5, 9), (4, 6, 0), (1, 7, 3), (3, 8, 0), (4, 3, 7), (3, 2, 6), (1, 4, -12)]
+charList = map(lambda x: int(x[2]), edgeList)           # List of all characters
 
-root = findRoot(edgeList)
+matrix = builder(nodeList, charList)
+print edgeList
+#listaTest = [(1, 5, 9), (4, 6, 0), (1, 7, 3), (3, 8, 0), (4, 3, 7), (3, 2, 6), (1, 4, 12)]
+#nodeTest = [1, 5, 4, 6, 7, 3, 8, 2]
+
+#root = findRoot(edgeList)
+
+matrixGen(edgeList, nodeList, matrix)
 #print root
 
 if len(sys.argv) == 2:
