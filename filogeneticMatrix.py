@@ -43,7 +43,8 @@ def matrixGen(edgeList, nodeList, matrix):
             node = int(edgeList[i][0])
             print node
     
-    print route
+    #print route
+        
 
 
 def shuffle(edgeList):
@@ -100,17 +101,21 @@ edgeList = re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M
 
 nodeList = (map(lambda x: int(x[0]), edgeList))         # List of all nodes construction
 nodeList.extend(map(lambda x: int(x[1]), edgeList))
-
+nodeList = list(set(nodeList))
 charList = map(lambda x: int(x[2]), edgeList)           # List of all characters
 
-matrix = builder(nodeList, charList)
-print edgeList
+charList.sort()
+
+print charList
+
+#matrix = builder(nodeList, charList)
+
 #listaTest = [(1, 5, 9), (4, 6, 0), (1, 7, 3), (3, 8, 0), (4, 3, 7), (3, 2, 6), (1, 4, 12)]
 #nodeTest = [1, 5, 4, 6, 7, 3, 8, 2]
 
 #root = findRoot(edgeList)
 
-matrixGen(edgeList, nodeList, matrix)
+#matrixGen(edgeList, nodeList, matrix)
 #print root
 
 if len(sys.argv) == 2:
