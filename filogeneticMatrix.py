@@ -19,7 +19,7 @@ def builder(nodeList, charList1):
 def arrayChar(edgeList,node):
 	#print("node")
 	#print(node)
-	if(int(node)==int(0)):
+	if(int(node)==int(0)): #TO DO: Function findNodeRoot
 		return listChar
 	else:
 		for i in range(len(edgeList)):
@@ -39,7 +39,7 @@ def arrayChar(edgeList,node):
 	return listChar
 	
 	
-def matrixGen(edgeList, nodeList, matrix):
+def matrixGen(edgeList, nodeList, matrix):  
 	listCharLose=list()
     #for j in range(len(nodeList)):
     #    node = nodeList[j]
