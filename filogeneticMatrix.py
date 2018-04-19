@@ -3,91 +3,72 @@
 
 import sys 
 import re
-import random
+import random,ast
 
 def builder(nodeList, charList1):
     
     #charList[:] = [char for char in charList if char >= 0]   # List of all positive characters
 
     nodes = len(nodeList)                                   # Number of nodes
-    characters = len(charList1)                              # Number of character
+    characters = len(charList1)                          # Number of character
 
     # Matrix building
     Matrix = [[0 for x in range(characters)] for y in range(nodes)]
     return Matrix
 
+def returnPos(node,list):#return 
+	#try:
+	flag=False
+	k=0
+	while(flag==False):
+		if(int(node)==int(list[k])):
+			flag=True
+		else:
+			k=k+1
+	return k
+	#TROVA SEMPRE UN K 
+	#CODICE MORTO 
+	#except:
+	#	print("Errore")
+	
+
 def arrayChar(edgeList,node):
-	#print("node")
-	#print(node)
 	if(int(node)==int(0)): #TO DO: Function findNodeRoot
 		return listChar
 	else:
 		for i in range(len(edgeList)):
 			if (int(node)==int(edgeList[i][1])):
 				#print(edgeList[i][1])
-				if (int(edgeList[i][1])<int(0)):
-					#print("Entro if")
-					number=int(edgeList[i][1])*-1
-					for j in range(len(listChar)):
-						if(listChar[j]==number):
-							del listChar[j]
-				else:
-					listChar.append(edgeList[i][2])
-					#print(listChar)
-					arrayChar(edgeList,edgeList[i][0])
+				listChar.append(edgeList[i][2])
+				#print(listChar)
+				arrayChar(edgeList,edgeList[i][0])
 	#print(listChar)
 	return listChar
 	
 	
 def matrixGen(edgeList, nodeList, matrix):  
-	listCharLose=list()
-    #for j in range(len(nodeList)):
-    #    node = nodeList[j]
 	nodeList.sort()
-	#print(nodeList)
-#print (edgeList)
-	for i in range(len(nodeList)):
-		#print("Dentro for")
+	for row in nodeList:
 		del listChar[0:len(listChar)]
-		#print(listChar)
-		lineMatrix=arrayChar(edgeList, i)
-		#print("lenmatrix")
-		#print(len(lineMatrix))
-		#print("Stampo lineMatrix")
-		#print(lineMatrix)
-		for y in range(len(lineMatrix)):
-			#print("lunghezza")
-			#print(len(lineMatrix))	
-			#print(y)
-			if(int(lineMatrix[y])<0):
-				listCharLose.append(lineMatrix[y])
-				number=int(lineMatrix[y])*(-1)
-				#print("numero")
-				#print(number)				
-				for x in range(len(lineMatrix)):
-					if (int(lineMatrix[x])==number):
-						listCharLose.append(lineMatrix[x])
-				#print(listCharLose)
-				#print(lineMatrix)
-		#print(lineMatrix)
-		lineMatrix=set(lineMatrix)
-		#print(lineMatrix)
-		listCharLose=set(listCharLose)
-		#print(listCharLose)
-		lineMatrix.difference_update(listCharLose)
+		lineMatrix=arrayChar(edgeList, row)
 		#print(lineMatrix)
 		listCharLose=list()
-		lineMatrix=list(lineMatrix)
-		print(lineMatrix)
-		for z in range(len(lineMatrix)):
-			for j in range(len(charList1)):
-				for k in range(len(lineMatrix)):
-					if(int(lineMatrix[k])==j):
-						matrix[i][j]=1
-				#print(matrix)
+		lineMatrix1=list()
+		for char in lineMatrix:
+			if(int(char)>=0):
+				if (int(char) not in listCharLose):
+					lineMatrix1.append(char)
+			else:
+				listCharLose.append((int(char)*-1))
+		#print(lineMatrix1)
+		charList1.sort()
+		for col in lineMatrix1:
+			matrix[returnPos(row,nodeList)][returnPos(col,charList1)]=1
 	lineMatrix=list()
-	print(matrix)
+	#print(matrix)
     #print route
+	return matrix
+
 
 def is_number(s):
     '''
@@ -128,6 +109,7 @@ charList.sort()
 
 matrix = builder(nodeList, charList1)
 
+
 #listaTest = [(1, 5, 9), (4, 6, 0), (1, 7, 3), (3, 8, 0), (4, 3, 7), (3, 2, 6), (1, 4, 12)]
 #nodeTest = [1, 5, 4, 6, 7, 3, 8, 2]
 
@@ -136,7 +118,13 @@ matrix = builder(nodeList, charList1)
 if len(sys.argv) == 2:
 	print("caso 1")
 	#print(charList1)
-	matrixGen(edgeList, nodeList, matrix)
+	matrix=matrixGen(edgeList, nodeList, matrix)
+	with open("output.txt", "w") as f:
+		for elem in matrix:
+			f.write(" ".join((str(elem).strip('[]').split(","))))
+			f.write("\n")
+
+	print(len(matrix[2]))
 	
 elif len(sys.argv) == 3:
     if sys.argv[2].lower() == "--shuffle":
