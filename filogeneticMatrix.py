@@ -68,8 +68,42 @@ def arrayChar(edgeList,node):
 				arrayChar(edgeList,edgeList[i][0])
 	#print(listChar)
 	return listChar
+
+def shuffle(matrix):
+	newM=[]
+	for i in range(len(matrix[0])):
+		col = []
+		for j in range(len(matrix)):
+			col.append(matrix[j][i])
+		newM.append(col)
+	#print("newM:\n",newM,"\n")
+	prova = len(newM)
+	matrixF=[]
+	while(prova>0):
+		u=random.randint(0, (len(newM)-1))
+		matrixF.append(newM.pop(u))
+		prova=prova-1
+	#print("matrixf:\n",matrixF)
+	#print(len(matrixF))
+	matrixFF = []
+	for i in range(len(matrixF[0])):
+		row = []
+		for j in range(len(matrixF)):
+			row.append(matrixF[j][i])
+		matrixFF.append(row)
+	#print("matrixFF:\n",matrixFF,"\n\n")
+	prova=len(matrixFF)
+	final=[]
+	while(prova>0):
+		u=random.randint(0, (len(matrixFF)-1))
+		final.append(matrixFF.pop(u))
+		prova=prova-1
+	print("final:\n",final)
+
+
+
 	
-	
+
 def matrixGen(edgeList, nodeList, matrix):  
 	nodeList.sort()
 	for row in nodeList:
@@ -146,10 +180,8 @@ if len(sys.argv) == 2:
 
 elif len(sys.argv) == 3:
     if sys.argv[2].lower() == "--shuffle":
-		root=findNodeRoot(edgeList)
-		listLeaves=findLeaves(edgeList)
-
-        print('prova')
+        matrix=matrixGen(edgeList, nodeList, matrix)
+        shuffle(matrix)
 elif len(sys.argv) == 4:
     if sys.argv[2].lower() == "--rows" and is_number(sys.argv[3]) and int(sys.argv[3]) <= len(edgeList):
         n = int(sys.argv[3])
@@ -161,12 +193,13 @@ elif len(sys.argv) == 4:
 elif len(sys.argv) == 5:
     if sys.argv[2].lower() == "--shuffle" and sys.argv[3].lower() == "--rows" and is_number(sys.argv[4]) and int(sys.argv[4]) <= len(edgeList):
         n = int(sys.argv[4])
-        print(n)
+        #print(n)
         #TO DO ********************
     if sys.argv[2].lower() == "--rows" and is_number(sys.argv[3]) and int(sys.argv[3]) <= len(edgeList) and sys.argv[4].lower() == "--shuffle":
         n = int(sys.argv[3])
         print(n)
         #TO DO ********************
+		
     else:
         print("Error: Invalid argument!")
         sys.exit()    
