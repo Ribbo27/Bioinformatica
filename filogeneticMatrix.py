@@ -3,8 +3,32 @@
 
 import sys 
 import re
-import random,ast
+import random
 
+def findNodeRoot(edgeList):  #Return root nodes
+	for root in edgeList:
+		rootCounter=0
+		for elem in edgeList:
+			if (int(root[0])==int(elem[1])):
+				rootCounter=rootCounter+1
+		if (rootCounter==0):
+			return root[0]
+	return 0 
+
+def findLeaves(edgeList):    #Return list of leaves
+	listLeaves=list()
+	for leaves in edgeList:
+		leavesCounter=0
+		for elem in edgeList:
+			if(int(leaves[1])==int(elem[0])):
+				leavesCounter=leavesCounter+1
+		if (leavesCounter==0):
+			listLeaves.append(leaves[1])
+	listLeaves = list(set(listLeaves))
+	print(listLeaves)
+	print(len(listLeaves))
+	return listLeaves
+							
 def builder(nodeList, charList1):
     
     #charList[:] = [char for char in charList if char >= 0]   # List of all positive characters
@@ -49,11 +73,11 @@ def arrayChar(edgeList,node):
 def matrixGen(edgeList, nodeList, matrix):  
 	nodeList.sort()
 	for row in nodeList:
-		del listChar[0:len(listChar)]
+		del listChar[0:len(listChar)]  #Svuoto lista 
 		lineMatrix=arrayChar(edgeList, row)
 		#print(lineMatrix)
-		listCharLose=list()
-		lineMatrix1=list()
+		listCharLose=list() #Lista di caratteri da eliminare 
+		lineMatrix1=list()  #List of characters without lose char 
 		for char in lineMatrix:
 			if(int(char)>=0):
 				if (int(char) not in listCharLose):
@@ -79,7 +103,7 @@ def is_number(s):
         --s: value to check
 
         Return True if s is a number, False otherwise
-    '''
+	'''
     try:
         int(s)
         return True
@@ -91,28 +115,24 @@ def is_number(s):
 nodeList = []       # List to store all nodes
 charList = list()   # List to store all characters
 edgeList = []       # Tuple's list to store tree (node1, node2, character)
-listChar=list()
+listChar=list()		#List of all characters for nodes 
 with open(sys.argv[1],'r') as input_file:   # Opening input file
     file = input_file.read()                # Reading whole file
 
 edgeList = re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M)
 
 #edgeList[:] = [x for x in edgeList if int(x[2]) >= 0]    
-
 nodeList = list(map(lambda x: int(x[0]), edgeList))         # List of all nodes construction
 nodeList.extend(map(lambda x: int(x[1]), edgeList))
 nodeList = list(set(nodeList))
 charList = list(map(lambda x: int(x[2]), edgeList))          # List of all characters
-charList1=[item for item in charList if item>=0]
-
+charList1=[item for item in charList if item>=0]		#List of all positive characters
 charList.sort()
-
 matrix = builder(nodeList, charList1)
 
 
 #listaTest = [(1, 5, 9), (4, 6, 0), (1, 7, 3), (3, 8, 0), (4, 3, 7), (3, 2, 6), (1, 4, 12)]
 #nodeTest = [1, 5, 4, 6, 7, 3, 8, 2]
-
 #matrixGen(edgeList, nodeList, matrix)
 
 if len(sys.argv) == 2:
@@ -124,10 +144,11 @@ if len(sys.argv) == 2:
 			f.write(" ".join((str(elem).strip('[]').split(","))))
 			f.write("\n")
 
-	print(len(matrix[2]))
-	
 elif len(sys.argv) == 3:
     if sys.argv[2].lower() == "--shuffle":
+		root=findNodeRoot(edgeList)
+		listLeaves=findLeaves(edgeList)
+
         print('prova')
 elif len(sys.argv) == 4:
     if sys.argv[2].lower() == "--rows" and is_number(sys.argv[3]) and int(sys.argv[3]) <= len(edgeList):
