@@ -43,7 +43,7 @@ def rown (nodeList,root,listLeaves,number):
 			#print(listNodeN)
 		return listNodeN
 	else:
-		sys.exit("Error: Invalid Number")
+		sys.exit("Error: Invalid argument")
 
 def shuffle(matrix):
 	newM=[]
@@ -117,8 +117,7 @@ def matrixGen(edgeList, nodeListN, matrix):
 		charListPositive.sort()	
 		for col in lineMatrixFinal:
 			matrix[returnPos(row,nodeListN)][returnPos(col,charListPositive)]=1
-	LineMatrix=list()
-
+	LineMatrix=list()	
 	print(matrix)
 	return matrix
 
@@ -146,7 +145,7 @@ charForNode=list()		#List of all characters for nodes
 with open(sys.argv[1],'r') as input_file:   # Opening input file
     file = input_file.read()                # Reading whole file
 	
-edgeList = re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M)
+edgeList = re.findall('^(\d+)\s+(\d+)\s+\{\'weight\'\:\s+([-]*\d+)\}$',file,re.M) #Regolar Esxpression
 nodeList = list(map(lambda x: int(x[0]), edgeList))         # List of all nodes construction
 nodeList.extend(map(lambda x: int(x[1]), edgeList))
 nodeList = list(set(nodeList))
