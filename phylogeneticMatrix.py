@@ -149,14 +149,6 @@ charListPositive=[item for item in charList if item>=0]		#List of all positive c
 listNodeN = list()  #List for rows N 
 matrix = list()  #List final matrix
 
-prova1 = findLeaves(edgeList)
-prova2 = findNodeRoot(edgeList)
-
-print("Foglie: ")
-print(prova1)
-print("Radici: ")
-print(prova2)
-
 if len(sys.argv) == 2:
 	matrix=matrixGen(edgeList, nodeList, matrix)
 	stampa()
