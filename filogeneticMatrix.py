@@ -25,22 +25,17 @@ def findLeaves(edgeList):    #Return list of leaves
 		if (leavesCounter==0):
 			listLeaves.append(int(leaves[1]))
 	listLeaves = list(set(listLeaves))
-	#print(listLeaves)
-	#print(len(listLeaves))
 	return listLeaves
 
 def rown (nodeList,root,listLeaves,number):
-	listNodeN=list(listLeaves)
-	#print(listNodeN)	
+	listNodeN=list(listLeaves)	
 	if(number>=len(listLeaves)):
-		#print(number)
 		number=(number-len(listLeaves))
 		while(number>0):
 			node=random.choice(nodeList)
 			if ((node!=root) and (node not in listLeaves) and (node not in listNodeN)):
 				listNodeN.append(node)
 				number=number-1
-			#print(listNodeN)
 		return listNodeN
 	else:
 		sys.exit("Error: Invalid argument")
@@ -52,22 +47,18 @@ def shuffle(matrix):
 		for j in range(len(matrix)):
 			col.append(matrix[j][i])
 		newM.append(col)
-	#print("newM:\n",newM,"\n")
 	index = len(newM)
 	matrixF=[]
 	while(index>0):
 		u=random.randint(0, (len(newM)-1))
 		matrixF.append(newM.pop(u))
 		index=index-1
-	#print("matrixf:\n",matrixF)
-	#print(len(matrixF))
 	matrixFF = []
 	for i in range(len(matrixF[0])):
 		row = []
 		for j in range(len(matrixF)):
 			row.append(matrixF[j][i])
 		matrixFF.append(row)
-	#print("matrixFF:\n",matrixFF,"\n\n")
 	index=len(matrixFF)
 	final=[]
 	while(index>0):
@@ -92,19 +83,15 @@ def arrayChar(edgeList,node):
 	else:
 		for i in range(len(edgeList)):
 			if (int(node)==int(edgeList[i][1])):
-				#print(edgeList[i][1])
 				charForNode.append(edgeList[i][2])
-				#print(listChar)
 				arrayChar(edgeList,edgeList[i][0])
-	#print(listChar)
 	return charForNode
 		
 def matrixGen(edgeList, nodeListN, matrix):  
 	nodeListN.sort()
-	#print(nodeListN)
 	matrix = [[0 for x in range(len(charListPositive))] for y in range(len(nodeListN))]
 	for row in nodeListN:
-		del charForNode[0:len(charForNode)]  #Svuoto lista 
+		del charForNode[:]  #Svuoto lista 
 		lineMatrix=arrayChar(edgeList, row)
 		listCharLose=list() #Lista di caratteri da eliminare 
 		lineMatrixFinal=list()  #List of characters without lose char 
@@ -137,6 +124,14 @@ def is_number(s):
     except ValueError:
         return False
 
+def stampa():
+	with open("output.txt", "w") as f:
+		f.write("Nodes: " + str(len(matrix)) + "   Characters: " + str(len(matrix[1])))
+		f.write("\n\n")
+		for elem in matrix:
+			f.write(" ".join((str(elem).strip('[]').split(","))))
+			f.write("\n")
+
 # Globals variables
 nodeList = []       # List to store all nodes
 charList = list()   # List to store all characters
@@ -151,39 +146,36 @@ nodeList.extend(map(lambda x: int(x[1]), edgeList))
 nodeList = list(set(nodeList))
 charList = list(map(lambda x: int(x[2]), edgeList))          # List of all characters
 charListPositive=[item for item in charList if item>=0]		#List of all positive characters
-listNodeN=list()  #List for rows N 
-matrix=list()  #List final matrix
+listNodeN = list()  #List for rows N 
+matrix = list()  #List final matrix
+
+prova1 = findLeaves(edgeList)
+prova2 = findNodeRoot(edgeList)
+
+print("Foglie: ")
+print(prova1)
+print("Radici: ")
+print(prova2)
 
 if len(sys.argv) == 2:
-	#print("caso 1")
 	matrix=matrixGen(edgeList, nodeList, matrix)
-	with open("output.txt", "w") as f:
-		for elem in matrix:
-			f.write(" ".join((str(elem).strip('[]').split(","))))
-			f.write("\n")
+	stampa()
 elif len(sys.argv) == 3:
 	if (sys.argv[2].lower() == "--shuffle"):
 		matrix=matrixGen(edgeList, nodeList, matrix)
 		matrix=shuffle(matrix)
-		with open("output.txt", "w") as f:
-			for elem in matrix:
-				f.write(" ".join((str(elem).strip('[]').split(","))))
-				f.write("\n")
+		stampa()
 	else:
 		sys.exit("Error: Invalid argument!")
 		 
 elif len(sys.argv) == 4:
 	if((sys.argv[2].lower() == "--rows") and (is_number(sys.argv[3])) and (int(sys.argv[3]) <= len(edgeList))):
-		#print("caso 3")
 		n = int(sys.argv[3])
 		leaves=findLeaves(edgeList)
 		root=findNodeRoot(edgeList)
 		nodeListN=rown(nodeList,root,leaves,n) 
 		matrix=matrixGen(edgeList, nodeListN, matrix)
-		with open("output.txt", "w") as f:
-			for elem in matrix:
-				f.write(" ".join((str(elem).strip('[]').split(","))))
-				f.write("\n")   
+		stampa()   
 	else:
 		sys.exit("Error: Invalid argument!")
            
@@ -195,10 +187,7 @@ elif len(sys.argv) == 5:
         nodeListN=rown(nodeList, root, leaves, n)
         matrix=matrixGen(edgeList, nodeListN, matrix)
         matrix=shuffle(matrix)
-        with open("output.txt", "w") as f:
-            for elem in matrix:
-                f.write(" ".join((str(elem).strip('[]').split(","))))
-                f.write("\n")
+        stampa()
     elif ((sys.argv[2].lower() == "--rows") and (is_number(sys.argv[3])) and (int(sys.argv[3]) <= len(edgeList)) and (sys.argv[4].lower() == "--shuffle")):
         n=int(sys.argv[3])
         leaves=findLeaves(edgeList)
@@ -206,10 +195,7 @@ elif len(sys.argv) == 5:
         nodeListN=rown(nodeList, root, leaves, n)
         matrix=matrixGen(edgeList, nodeListN, matrix)
         matrix=shuffle(matrix)
-        with open("output.txt", "w") as f:
-            for elem in matrix:
-                f.write(" ".join((str(elem).strip('[]').split(","))))
-                f.write("\n")
+        stampa()
     else:
         sys.exit("Error: Invalid argument!")    
 else:
